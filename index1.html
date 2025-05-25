@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTracker - Your Workout Companion</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            padding-top: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .diet-plan {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        .diet-plan.show {
+            display: block;
+        }
+
+        .diet-plan h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .diet-plan p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-display {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            display: none;
+        }
+
+        .stat-card.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .form-card {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .stats-display {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Add an anchor point for the home section -->
+    <div id="home"></div>
+    
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-dumbbell"></i>
+            <span>CROSSFIT</span>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="project.html"><i class="fas fa-chart-line"></i> Programs</a></li>
+                <li><a href="workout.html"><i class="fas fa-calendar-alt"></i> Workouts</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="form-card">
+            <h1 class="form-title">Track Your Workout</h1>
+            <p class="form-subtitle">Enter your workout details to get a personalized diet plan</p>
+            
+            <form id="workoutForm">
+                <div class="input-group">
+                    <label for="steps">
+                        <i class="fas fa-walking"></i>
+                        Number of Steps
+                    </label>
+                    <input type="number" id="steps" name="steps" placeholder="e.g., 8000" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="calories">
+                        <i class="fas fa-fire"></i>
+                        Calories Burned
+                    </label>
+                    <input type="number" id="calories" name="calories" placeholder="e.g., 350" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="time">
+                        <i class="fas fa-clock"></i>
+                        Workout Duration (minutes)
+                    </label>
+                    <input type="number" id="time" name="time" placeholder="e.g., 45" required>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-utensils"></i>
+                        Get Diet Plan
+                    </button>
+                    <a href="project.html" class="btn btn-secondary">
+                        <i class="fas fa-rocket"></i>
+                        Advanced Plans
+                    </a>
+                </div>
+            </form>
+
+            <div id="statsDisplay" class="stats-display"></div>
+            <div id="dietPlan" class="diet-plan"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("workoutForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const steps = parseInt(document.getElementById("steps").value);
+            const calories = parseInt(document.getElementById("calories").value);
+            const time = parseInt(document.getElementById("time").value);
+
+            // Display stats
+            displayStats(steps, calories, time);
+
+            // Generate and display diet plan
+            const dietPlan = generateDietPlan(steps, calories, time);
+            const dietPlanElement = document.getElementById("dietPlan");
+            dietPlanElement.innerHTML = `
+                <h3><i class="fas fa-apple-alt"></i> Your Personalized Diet Plan</h3>
+                <p>${dietPlan}</p>
+            `;
+            dietPlanElement.classList.add("show");
+        });
+
+        function displayStats(steps, calories, time) {
+            const statsElement = document.getElementById("statsDisplay");
+            statsElement.innerHTML = `
+                <div class="stat-card show">
+                    <div class="stat-value">${steps.toLocaleString()}</div>
+                    <div class="stat-label">Steps</div>
+                </div>
+                <div class="stat-card show">
+                    <div class="stat-value">${calories}</div>
+                    <div class="stat-label">Calories</div>
+                </div>
+                <div class="stat-card show">
+                    <div class="stat-value">${time}</div>
+                    <div class="stat-label">Minutes</div>
+                </div>
+            `;
+        }
+
+        function generateDietPlan(steps, calories, time) {
+            let plan = "";
+            
+            if (steps >= 15000 && calories >= 600) {
+                plan = "🏆 Excellent workout! You've achieved outstanding activity levels. Focus on high-protein recovery meals: grilled salmon with quinoa and roasted vegetables, protein smoothie with banana and spinach, and plenty of water for optimal recovery.";
+            } else if (steps >= 10000 && calories >= 400) {
+                plan = "🎯 Great job reaching your fitness goals! Reward yourself with balanced nutrition: lean chicken breast with sweet potato and steamed broccoli, Greek yogurt with berries, and mixed nuts for sustained energy.";
+            } else if (steps >= 8000 && calories >= 300) {
+                plan = "👍 Good workout session! Support your progress with: turkey and avocado wrap with whole grain tortilla, vegetable stir-fry with tofu, and fresh fruit for natural energy boost.";
+            } else if (steps >= 5000 && calories >= 200) {
+                plan = "🌟 Nice start! Keep building momentum with: grilled chicken salad with mixed greens and olive oil dressing, whole grain toast with almond butter, and herbal tea for hydration.";
+            } else {
+                plan = "💪 Every step counts! Begin your journey with: lean protein like fish or chicken, plenty of colorful vegetables, whole grains, and remember to stay hydrated throughout the day.";
+            }
+
+            return plan;
+        }
+
+        // Add smooth scrolling and form validation
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value < 0) this.value = 0;
+            });
+        });
+
+        // Handle home button click with smooth scrolling
+        document.querySelector('a[href="#home"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('home').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        });
+    </script>
+</body>
+</html>
